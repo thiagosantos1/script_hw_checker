@@ -1,0 +1,21 @@
+Carla, a 10 year old girl, has started her own little market of selling lemonade. She is having a hard time to calculate how much profit she is making every day. Can you help her?
+
+Write a program to:
+	1) Read the following input:
+		* How many lemonade she sold
+		* How much does she sell each lemonade?
+		* How much does it cost to make 1 lemonade?
+
+	2) Output Carla's profit
+
+Example:
+
+Inputs:
+	lemonades sold = 100
+	price of each lemonade = 3
+	cost of each lemonade = 1
+
+Output:
+	Carla made $200.00 of profit today.
+
+Hint: Profit may be a fractional number. Therefore, print with 2 decimal places

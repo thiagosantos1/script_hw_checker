@@ -1,0 +1,8 @@
+-1
+		### Something is wrong ###
+Your output:
+Carla made 200.00 o profit.
+
+Correct output:
+Carla made 200.00 of profit.
+

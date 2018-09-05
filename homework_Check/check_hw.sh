@@ -68,7 +68,7 @@ else
 fi
 
 # Run all test predefined in file inputTest.txt
-inputs_file="hw_check/inputTest.txt"
+inputs_file="hw_check/input_$HW.txt"
 index=0
 inputs[$index]=0
 while IFS= read line

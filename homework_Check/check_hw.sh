@@ -6,7 +6,6 @@ ARGC=$#
 EXPECTED_ARGS=1
 E_BADARGS=65
 
-
 if [ $# -lt $EXPECTED_ARGS ]
 then
   echo "Paramters required: <homework>"
@@ -16,7 +15,7 @@ fi
 HW="$1"
 
 # List of homework to check. --> Must change everytime create new homeworks
-HW_Check="hw1 hw2 hw3 hw4"
+HW_Check="hw1 hw2 hw3 hw4 hw5"
 HW_List=($HW_Check)
 
 Prof_Folder="hw_check/"
@@ -111,7 +110,7 @@ done
 if [ $passed_check = 1 ];
 then
 	clear
-    echo "\n\t### You program has passed all checks! Well done ###\n"
+    echo "### You program has passed all checks! Well done ###"
 else
 #   jump the first iteration(not to print first line)
 	jump=0
@@ -126,7 +125,7 @@ else
 		if [ $jump = 2 ];
 		then
 			jump=3
-			echo "Inputs used:" "${inputs[$input_index]}\n"
+			echo "Inputs used:" "${inputs[$input_index]}"
 		fi
 
 		echo $line
@@ -134,7 +133,7 @@ else
 		
 	done <"$comparison"
 
-    echo "Please, fix your code. Don't give it up\n"
+    echo "Please, fix your code. Don't give it up"
 
 fi
 

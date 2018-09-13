@@ -3,28 +3,35 @@
 
 # gonna use argc 
 ARGC=$#
-E_BADARGS=65
+E_BADARGS=65 
 
 EXPECTED_ONE_ARGS=1
 
+
 # Path of where to find the folder of student's homeworks. 
 # Just change here for your disire.
-PATH_FOLDERS="/Users/thiago/Test"
+PATH_FOLDERS="/u1/class"
 
 # folder from student you are wishing to copy. Change here for your special case
-FOLDER_TO_COPY="Homework"
+#FOLDER_TO_COPY="cs256/Homework/assig1"
+
+# for labs
+FOLDER_TO_COPY="cs256/Labs/lab_1"
 
 # base of classe range
 BASE_CLASS="cs"
 
 # Range of folders for each student
 # 25600 - 25650 for my class example
-RANGE_FOLDERS=(25600 25650)
+RANGE_FOLDERS=(25600 25649)
 
 # Thus, an example of class would be cs25619
 
 # Where to copy to
-copy_to="/Users/thiago/cs256/collected/hw"
+#copy_to="/u1/h2/tsantos2/cs256/collected/hw/hw1"
+
+# for lab
+copy_to="/u1/h2/tsantos2/cs256/collected/labs/lab_1"
 
 # Ouput confirmation file
 out_file="output_file.txt"
@@ -105,6 +112,7 @@ else
 fi
 
 file_path="$copy_to/$out_file"
+origin_path="$out_file"
 if [ ! -e $file_path ]; then
   touch $file_path
 else
@@ -113,11 +121,13 @@ else
 fi
 
 # copy results to file, to output
-echo "\t####### Succefully copied $FOLDER_TO_COPY from Students ####### \n" >> $file_path
-n=0
+echo " " >> $file_path
+echo "        ####### Succefully copied $FOLDER_TO_COPY from Students #######" >> $file_path
+echo " " >> $file_path
+n=1
 out=""
 for i in $folders_copied; do
-  out="$out $i"
+  out="$out$i "
   if [ $n = 7 ]; then
     echo $out >> $file_path
     n=0
@@ -127,11 +137,13 @@ for i in $folders_copied; do
 done
 echo $out >> $file_path
 
-echo "\n\t####### Weren't able to copy $FOLDER_TO_COPY from Students #######\n" >> $file_path
-n=0
+echo " " >> $file_path
+echo "       ####### Weren't able to copy $FOLDER_TO_COPY from Students #######" >> $file_path
+echo " " >> $file_path
+n=1
 out=""
 for i in $folders_not_copied; do
-  out="$out $i"
+  out="$out$i "
   if [ $n = 7 ]; then
     echo $out >> $file_path
     n=0
@@ -139,7 +151,19 @@ for i in $folders_not_copied; do
   fi
   n=$((n + 1))
 done
-echo "$out\n" >> $file_path
+echo "$out" >> $file_path
+echo " " >> $file_path
+
+# make a copy for a file where we did execute the bash script
+if [ -e $origin_path ]; then
+  rm $origin_path
+fi
+
+cp "$file_path" "."
+
+
+
+
 
 
 

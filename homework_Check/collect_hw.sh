@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/sh 
 #chmod u+x
 
 # gonna use argc 
@@ -13,10 +13,10 @@ EXPECTED_ONE_ARGS=1
 PATH_FOLDERS="/u1/class"
 
 # folder from student you are wishing to copy. Change here for your special case
-#FOLDER_TO_COPY="cs256/Homework/assig1"
+FOLDER_TO_COPY="cs256/Homeworks/assig1"
 
 # for labs
-FOLDER_TO_COPY="cs256/Labs/lab_1"
+#FOLDER_TO_COPY="cs256/Labs/lab_1"
 
 # base of classe range
 BASE_CLASS="cs"
@@ -28,10 +28,10 @@ RANGE_FOLDERS=(25600 25649)
 # Thus, an example of class would be cs25619
 
 # Where to copy to
-#copy_to="/u1/h2/tsantos2/cs256/collected/hw/hw1"
+copy_to="/u1/h2/tsantos2/cs256/collected/hw/hw1"
 
 # for lab
-copy_to="/u1/h2/tsantos2/cs256/collected/labs/lab_1"
+#copy_to="/u1/h2/tsantos2/cs256/collected/labs/lab_1"
 
 # Ouput confirmation file
 out_file="output_file.txt"

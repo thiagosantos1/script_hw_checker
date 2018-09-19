@@ -1,168 +1,143 @@
 #!/bin/sh
-#chmod u+x
+#chmod u+x 
 
-# gonna use argc 
 ARGC=$#
-E_BADARGS=65 
 
-EXPECTED_ONE_ARGS=1
+EXPECTED_ARGS=1
+E_BADARGS=65
 
-
-# Path of where to find the folder of student's homeworks. 
-# Just change here for your disire.
-PATH_FOLDERS="/u1/class"
-
-# folder from student you are wishing to copy. Change here for your special case
-#FOLDER_TO_COPY="cs256/Homework/assig1"
-
-# for labs
-FOLDER_TO_COPY="cs256/Labs/lab_1"
-
-# base of classe range
-BASE_CLASS="cs"
-
-# Range of folders for each student
-# 25600 - 25650 for my class example
-RANGE_FOLDERS=(25600 25649)
-
-# Thus, an example of class would be cs25619
-
-# Where to copy to
-#copy_to="/u1/h2/tsantos2/cs256/collected/hw/hw1"
-
-# for lab
-copy_to="/u1/h2/tsantos2/cs256/collected/labs/lab_1"
-
-# Ouput confirmation file
-out_file="output_file.txt"
-
-# All files copied
-folders_copied=""
-
-# All files copied
-folders_not_copied=""
-# check if class folder exist and also if folder to copy to exist
-if [ ! -d $copy_to ]; then
-  echo "Folder $copy_to do not exist"
-  exit $E_BADARGS
-fi
-
-if [ ! -d $PATH_FOLDERS ]; then
-  echo "Folder $PATH_FOLDERS do not exist"
-  exit $E_BADARGS
-fi
-
-if [ $# -lt $EXPECTED_ONE_ARGS ]
+if [ $# -lt $EXPECTED_ARGS ]
 then
-# All homeworks must be collect
-  for folder_num in `seq ${RANGE_FOLDERS[0]} ${RANGE_FOLDERS[1]}`;
-  do
-#     student folder
-    folder_base=$BASE_CLASS$folder_num
-
-#     Check if student's main folder exist
-    main_folder="$PATH_FOLDERS/$folder_base"
-    if [ ! -d $main_folder ]; then
-#      echo "Student $folder_base do not exist"
-      true
-    else
-#     Check if student's especial folder exist - hw, lab or any other you want to collect
-      folder="$main_folder/$FOLDER_TO_COPY"
-      if [ ! -d $folder ]; then
-#        echo "Student $folder_base do not have $FOLDER_TO_COPY"
-        folders_not_copied="$folders_not_copied $folder_base"
-      else
-#       Then, copy the holder
-        copy_to_stu="$copy_to/$folder_base"
-        if [ ! -d $copy_to_stu ]; then
-          mkdir $copy_to_stu
-        fi
-        cp -r $folder $copy_to_stu 
-        folders_copied="$folders_copied $folder_base"
-      fi
-
-    fi
-  done   
-
-
-else
-# just gonna collect for the specific student
-  folder_base=($"$1")
-  main_folder="$PATH_FOLDERS/$folder_base"
-  if [ ! -d $main_folder ]; then
-#    echo "Student $folder_base do not exist"
-  true
-  else
-#    Check if student's especial folder exist - hw, lab or any other you want to collect
-    folder="$main_folder/$FOLDER_TO_COPY"
-    if [ ! -d $folder ]; then
-#      echo "Student $folder_base do not have $FOLDER_TO_COPY"
-      folders_not_copied="$folders_not_copied $folder_base"
-    else
-#       Then, copy the holder
-      copy_to_stu="$copy_to/$folder_base"
-      if [ ! -d $copy_to_stu ]; then
-        mkdir $copy_to_stu
-      fi
-      cp -r $folder $copy_to_stu 
-      folders_copied="$folders_copied $folder_base"
-    fi
-
-  fi
+  echo "Paramters required: <homework>"
+  exit $E_BADARGS
 fi
 
-file_path="$copy_to/$out_file"
-origin_path="$out_file"
-if [ ! -e $file_path ]; then
-  touch $file_path
-else
-  rm $file_path
-  touch $file_path
-fi
+HW="$1"
 
-# copy results to file, to output
-echo " " >> $file_path
-echo "        ####### Succefully copied $FOLDER_TO_COPY from Students #######" >> $file_path
-echo " " >> $file_path
-n=1
-out=""
-for i in $folders_copied; do
-  out="$out$i "
-  if [ $n = 7 ]; then
-    echo $out >> $file_path
-    n=0
-    out=""
-  fi
-  n=$((n + 1))
+# List of homework to check. --> Must change everytime create new homeworks
+HW_Check="hw1 hw2 hw3 hw4 hw5 hw6 hw7 hw8"
+HW_List=($HW_Check)
+
+Prof_Folder="hw_check/"
+
+# Check if homework exist
+hw_exist=-1
+for i in $HW_Check; do
+	if [ $i = $HW ]; then
+		hw_exist=1
+    	break
+  	fi
 done
-echo $out >> $file_path
 
-echo " " >> $file_path
-echo "       ####### Weren't able to copy $FOLDER_TO_COPY from Students #######" >> $file_path
-echo " " >> $file_path
-n=1
-out=""
-for i in $folders_not_copied; do
-  out="$out$i "
-  if [ $n = 7 ]; then
-    echo $out >> $file_path
-    n=0
-    out=""
-  fi
-  n=$((n + 1))
-done
-echo "$out" >> $file_path
-echo " " >> $file_path
-
-# make a copy for a file where we did execute the bash script
-if [ -e $origin_path ]; then
-  rm $origin_path
+if [ $hw_exist -lt 1 ]; then
+	echo "There is not a check for $HW"
+    exit $E_BADARGS
 fi
 
-cp "$file_path" "."
+# Check if student has created file
+FL="$HW.c"
+if [ -e $FL ]
+then
+	make clean rm_out=$HW;
+#	make clean rm_out=$Prof_Folder$HW;
+    gcc $FL -o "$HW"
+#    gcc "$Prof_Folder$HW.c" -o "$Prof_Folder/$HW"
+else
+    echo "$HW.c does not exist"
+    exit $E_BADARGS
+fi
 
+# continue only if output was succefully created
+FL="$HW"
+if [ -e $FL ]
+then
+    continue
+else
+    echo "Your program did not compile! See the problems above"
+    exit $E_BADARGS
+fi
 
+# check if professor/me has created an output file for comparison
+FL="$Prof_Folder$HW"
+if [ -e $FL ]
+then
+    continue
+else
+    echo "I forgot to put the .out file for this problem. Please ask me."
+    exit $E_BADARGS
+fi
 
+# Run all test predefined in file inputTest.txt
+inputs_file="hw_check/input_$HW.txt"
+index=0
+inputs[$index]=0
+while IFS= read line
+do
+	inputs[$index]=$line
+	index=$((index + 1))
+done <"$inputs_file"
+
+file_test="hw_check/input.txt"
+passed_check=1 
+input_index=0
+for (( input_index=0; $input_index<$index; input_index=$((input_index + 1)) ))
+do
+
+#	Create a file to be execute
+	exec 3<> "$file_test"
+		echo "${inputs[$input_index]}" >&3
+	exec 3>&-
+# execute program from professeor and student, to create the output to be compared
+	make run c_out=$HW inputs=$file_test;
+
+# execute hwCheck.py to compare answers
+	python3 hw_check/hwCheck.py
+
+# read the comparison to make sure to stop as soon it fails in one test
+	comparison="hw_check/comparison.txt"
+	while IFS= read line
+	do
+		return_output=$line
+		break
+	done <"$comparison"
+
+	if [ $return_output = -1 ];
+	then
+		passed_check=-1
+		break
+	fi
+	echo "Hey: $return_output"
+done
+
+if [ $passed_check = 1 ];
+then
+	clear
+    echo "### You program has passed all checks! Well done ###"
+else
+#   jump the first iteration(not to print first line)
+	jump=0
+	while IFS= read line;
+	do
+		if [ $jump = 0 ];
+		then
+			jump=1
+			continue
+		fi
+# to print the input causing the error
+		if [ $jump = 2 ];
+		then
+			jump=3
+			echo "Inputs used:" "${inputs[$input_index]}"
+		fi
+
+		echo "$line"
+		jump=$((jump+1))
+		
+	done <"$comparison"
+
+    echo "Please, fix your code. Don't give it up"
+
+fi
 
 
 
